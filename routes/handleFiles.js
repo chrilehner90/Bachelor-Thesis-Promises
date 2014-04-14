@@ -1,5 +1,6 @@
 var FS = require("fs"),
- 	  Q = require("q");
+	Q = require("q");
+
 
 exports.receiveUpload = function(req, res){
 	var files = req.files.uploads;
@@ -21,7 +22,7 @@ exports.receiveUpload = function(req, res){
 		function(reason) {
 			res.send(reason);
 		}
-	)
+	);
 };
 
 
@@ -30,26 +31,26 @@ function fileReader(file) {
 	console.log(file);
 	FS.readFile(file.path, function (err, data) {
 
-	var imageName = file.name;
+		var imageName = file.name;
+		console.log(data);
 
-	/// If there's an error
-	if(!imageName){
+		/// If there's an error
+		if(!imageName){
 
-		console.log("There was an error")
-		res.redirect("/");
-		res.end();
+			console.log("There was an error");
+			res.redirect("/");
+			res.end();
 
-	}
-	else {
+		}
+		else {
+			var newPath = "public/uploads/" + imageName;
 
-	  var newPath = "public/uploads/" + imageName;
+			// write file to uploads folder
+			FS.writeFile(newPath, data, function (err) {
+				deferred.resolve("done!");
 
-	  /// write file to uploads/fullsize folder
-	  FS.writeFile(newPath, data, function (err) {
-	  	deferred.resolve("done!");
-
-	  });
-	}
+			});
+		}
   });
   return deferred.promise;
 }
