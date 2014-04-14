@@ -4,19 +4,19 @@ window.onload = function() {
 		console.log("TEST");
 		evt.preventDefault();
 		var files = evt.target.files;
-	  	var output = [];
-	  	var promises = [];
-	  	for (var i = 0, f; f = files[i]; i++) {
+		var output = [];
+		var promises = [];
+		for (var file in files) {
 
 			// Only process image files.
 			if (!f.type.match('image.*')) {
 				continue;
 			}
 
-			promises.push(readFile(f));
+			promises.push(readFile(files[file]));
 		}
 
-		var imageModifierPromises = undefined;
+		var imageModifierPromises;
 		// Call the .then() function after all promises have been fulfilled
 		Promise.all(promises).then(function(files) {
 			console.log("All promises are fulfilled!");
@@ -80,14 +80,15 @@ window.onload = function() {
 
 	// Check for the various File API support.
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
-	  document.getElementById('files').addEventListener('change', handleFileInput, false);
+		document.getElementById('files').addEventListener('change', handleFileInput, false);
 
-	  // Click button to see that the site is still responding while it reads the files
-	  document.getElementById('btn').addEventListener('click', function() {
-	  	console.log("clicked");
-	  }, false);
-	} else {
-	  alert('The File APIs are not fully supported in this browser.');
+		// Click button to see that the site is still responding while it reads the files
+		document.getElementById('btn').addEventListener('click', function() {
+			console.log("clicked");
+		}, false);
+	}
+	else {
+		alert('The File APIs are not fully supported in this browser.');
 	}
 
 };
