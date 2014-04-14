@@ -6,14 +6,15 @@ window.onload = function() {
 		var files = evt.target.files;
 		var output = [];
 		var promises = [];
-		for (var file in files) {
-
+		var f;
+		for (var i = 0; i < files.length; i++) {
+			f = files[i];
 			// Only process image files.
 			if (!f.type.match('image.*')) {
 				continue;
 			}
 
-			promises.push(readFile(files[file]));
+			promises.push(readFile(f));
 		}
 
 		var imageModifierPromises;

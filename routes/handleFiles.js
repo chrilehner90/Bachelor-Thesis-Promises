@@ -28,11 +28,9 @@ exports.receiveUpload = function(req, res){
 
 function fileReader(file) {
 	var deferred = Q.defer();
-	console.log(file);
 	FS.readFile(file.path, function (err, data) {
 
 		var imageName = file.name;
-		console.log(data);
 
 		/// If there's an error
 		if(!imageName){
