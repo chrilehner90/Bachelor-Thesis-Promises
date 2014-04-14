@@ -8,11 +8,11 @@ exports.receiveUpload = function(req, res){
 
 	if(req.files.uploads.length !== undefined) {
 		for(var file in files) {
-			promisedFiles.push(fileReader(files[file]));
+			promisedFiles.push(fileHandler(files[file]));
 		}
 	}
 	else {
-		promisedFiles.push(fileReader(files));
+		promisedFiles.push(fileHandler(files));
 	}
 
 	Q.all(promisedFiles).then(
@@ -26,7 +26,7 @@ exports.receiveUpload = function(req, res){
 };
 
 
-function fileReader(file) {
+function fileHandler(file) {
 	var deferred = Q.defer();
 	FS.readFile(file.path, function (err, data) {
 
@@ -45,6 +45,9 @@ function fileReader(file) {
 
 			// write file to uploads folder
 			FS.writeFile(newPath, data, function (err) {
+				if(err) {
+					deferred.reject(err);
+				}
 				deferred.resolve("done!");
 
 			});
