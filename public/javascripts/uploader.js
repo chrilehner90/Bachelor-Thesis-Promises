@@ -58,8 +58,8 @@ window.onload = function() {
 		var responsePromise = new Promise(function(resolve, reject) {
 			xhr.onload = function() {
 				resolve(this.responseText);
-			}
-		})
+			};
+		});
 		
 		xhr.open("POST", "http://localhost:3000/upload", true);
 		xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
