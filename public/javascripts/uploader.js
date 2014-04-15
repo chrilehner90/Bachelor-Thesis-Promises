@@ -1,7 +1,6 @@
 window.onload = function() {
 
 	function handleFileInput(evt) {
-		console.log("TEST");
 		evt.preventDefault();
 		var files = evt.target.files;
 		var output = [];

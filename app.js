@@ -4,7 +4,6 @@
  */
 
 var express = require('express');
-console.log(express.version);
 var routes = require('./routes');
 var handleFiles = require('./routes/handleFiles');
 var http = require('http');
