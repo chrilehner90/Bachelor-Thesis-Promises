@@ -1,7 +1,6 @@
 window.onload = function() {
 
 	function handleFileInput(evt) {
-		evt.preventDefault();
 		var files = evt.target.files;
 		var output = [];
 		var promises = [];
@@ -16,14 +15,12 @@ window.onload = function() {
 			promises.push(readFile(f));
 		}
 
-		var imageModifierPromises;
 		// Call the .then() function after all promises have been fulfilled
 		Promise.all(promises).then(function(files) {
 			console.log("All promises are fulfilled!");
 			return uploadFiles(files);
-		}).then(function(files) {
-			console.log(files);
-			uploadedFiles(files);
+		}).then(function(serverResponse) {
+			console.log(serverResponse);
 		});
 	}
 
@@ -37,20 +34,16 @@ window.onload = function() {
 
 		return new Promise(function(resolve, reject) {
 			// Closure to capture the file information.
-			reader.onload = (function(f) {
-				return function(e) {
-					var file = {
-						'data': f,
-						'path': e.target.result
-					};
-					resolve(file);
+			reader.onloadend = function() {
+				var file = {
+					'data': f,
+					'path': reader.result
 				};
-			})(f);
+				resolve(file);
+			};
 			// Read in the image file as a data URL.
 			reader.readAsDataURL(f);
-			//reader.readAsBinaryString(f);
 		});
-		
 	}
 
 	/*
@@ -62,21 +55,21 @@ window.onload = function() {
 		var xhr = new XMLHttpRequest();
 		var formData = new FormData();
 		console.log(files);
-		xhr.onload = successfullyUploaded;
+		var responsePromise = new Promise(function(resolve, reject) {
+			xhr.onload = function() {
+				resolve(this.responseText);
+			}
+		})
+		
 		xhr.open("POST", "http://localhost:3000/upload", true);
 		xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 		for(var file in files) {
-			
 			formData.append("uploads", files[file].data);
-			
 		}
 		xhr.send(formData);
-		
+		return responsePromise;
 	}
 
-	function successfullyUploaded() {
-		console.log(this.responseText);
-	}
 
 	// Check for the various File API support.
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
