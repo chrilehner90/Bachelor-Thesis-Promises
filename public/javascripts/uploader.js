@@ -7,58 +7,52 @@ window.onload = function() {
 		var f;
 		for (var i = 0; i < files.length; i++) {
 			f = files[i];
-			// Only process image files.
-			if (!f.type.match('image.*')) {
-				continue;
-			}
-
 			promises.push(readFile(f));
 		}
 
 		// Call the .then() function after all promises have been fulfilled
-		Promise.all(promises).then(function(files) {
-			console.log("All promises are fulfilled!");
+		Promise.all(promises).then(function onResolve(files) {
 			return uploadFiles(files);
-		}).then(function(serverResponse) {
+		}).then(function onResolve(serverResponse) {
 			console.log(serverResponse);
+		}).catch(function(err) {
+			console.error(err);
 		});
 	}
 
-	/*
-	 * readFile(File)
-	 * returns a promise for every file
-	 */
-
 	function readFile(f) {
-		var reader = new FileReader();
-
 		return new Promise(function(resolve, reject) {
-			// Closure to capture the file information.
-			reader.onloadend = function() {
+			var reader = new FileReader();
+			reader.onload = function() {
 				var file = {
 					'data': f,
 					'path': reader.result
 				};
 				resolve(file);
 			};
+			reader.onerror = function(evt) {
+				reject(evt.target.error.message);
+			};
 			// Read in the image file as a data URL.
 			reader.readAsDataURL(f);
 		});
 	}
 
-	/*
-	 * uploadFiles(Files Array)
-	 * 
-	 */
-
 	function uploadFiles(files) {
 		var xhr = new XMLHttpRequest();
 		var formData = new FormData();
-		console.log(files);
 		var responsePromise = new Promise(function(resolve, reject) {
 			xhr.onload = function() {
-				resolve(this.responseText);
+				if(xhr.status === 200) {
+					resolve(this.responseText);
+				}
+				else {
+					reject(xhr.statusText);
+				}
 			};
+			xhr.onerror = function(evt) {
+				reject(evt.target.error.message);
+			}
 		});
 		
 		xhr.open("POST", "http://localhost:3000/upload", true);
