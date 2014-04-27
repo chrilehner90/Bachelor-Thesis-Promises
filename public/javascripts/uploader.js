@@ -1,8 +1,8 @@
 window.onload = function() {
+	'use strict';
 
 	function handleFileInput(evt) {
 		var files = evt.target.files;
-		var output = [];
 		var promises = [];
 		var f;
 		for (var i = 0; i < files.length; i++) {
@@ -52,13 +52,13 @@ window.onload = function() {
 			};
 			xhr.onerror = function(evt) {
 				reject(evt.target.error.message);
-			}
+			};
 		});
 		
-		xhr.open("POST", "http://localhost:3000/upload", true);
+		xhr.open('POST', 'http://localhost:3000/upload', true);
 		xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 		for(var file in files) {
-			formData.append("uploads", files[file].data);
+			formData.append('uploads', files[file].data);
 		}
 		xhr.send(formData);
 		return responsePromise;
@@ -71,7 +71,7 @@ window.onload = function() {
 
 		// Click button to see that the site is still responding while it reads the files
 		document.getElementById('btn').addEventListener('click', function() {
-			console.log("clicked");
+			console.log('clicked');
 		}, false);
 	}
 	else {
