@@ -1,4 +1,9 @@
-Bachelor-Thesis-Server
-======================
+#Example of Promises for my Bachelor Thesis
 
-Node.js App to upload files
+This application is an asynchronous file uploader, which was developed for my bachelor thesis at University of Applied Science Salzburg. It uses the FileReader API, FormData, XMLHTTPRequest and ES6 Promises.
+The Backend uses the Q Promises Library: https://github.com/kriskowal/q
+
+Clone the app and execute it with the following command:
+```
+node app.js
+```
