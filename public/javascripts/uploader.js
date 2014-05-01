@@ -11,8 +11,9 @@ window.onload = function() {
 		}
 
 		// Call the .then() function after all promises have been fulfilled
-		Promise.all(promises).then(function onResolve(files) {
-			return uploadFiles(files);
+		Promise.all(promises).then(function onResolve(readFiles) {
+			return uploadFiles(readFiles);
+
 		}).then(function onResolve(serverResponse) {
 			console.log(serverResponse);
 		}).catch(function(err) {
